@@ -1,0 +1,44 @@
+.game-button {
+	width: 100%;
+
+	padding: 0.6rem 1.4rem;
+
+	background: #F6E4CD;
+	color: black;
+
+	font-size: 20px;
+
+	outline: none;
+
+	border: 2px solid #d4c1a8;
+	border-radius: 6px;
+
+	box-shadow: 0 6px 0 0 #c1ad92;
+
+	transition: 0.1s ease-in-out all;
+
+	cursor: pointer;
+
+	&:hover {
+		transform: translateY(4px);
+		box-shadow: 0 2px 0 0 #c1ad92;
+	}
+	&:focus {
+		transform: translateY(6px);
+		box-shadow: none;
+		filter: brightness(0.85);
+	}
+
+	&[accent] {
+		background: var(--color-accent);
+		color: var(--color-accent-text);
+		border: 2px solid var(--color-accent-border);
+
+		box-shadow: 0 6px 0 0 #2036a3;
+
+		&:hover {
+			transform: translateY(4px);
+			box-shadow: 0 2px 0 0 var(--color-accent-shadow);
+		}
+	}
+}
