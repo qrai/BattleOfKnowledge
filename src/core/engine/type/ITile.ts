@@ -22,6 +22,7 @@ export const Tiles: Record<string, ITile> = {
 	"wooden_support": { title: "Дерево", image: "wall/woodenSupportsBlock" },
 	"chest": { title: "Сундук", image: "decor/chestClosed" },
 
+	"stoneWall": { title: "Каменная стена", image: "wall/stoneWall" },
 	/*
 	// Stone: Ground
 	"ground/stone", // 10

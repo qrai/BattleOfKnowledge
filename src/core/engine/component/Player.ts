@@ -187,4 +187,13 @@ export default class Player extends IComponent {
 			this.y
 		)
 	}
+
+	public getPosition(): { Xi: number, Yi: number } | null {
+		if(!this.engine) return null
+
+		let { Xi, Yi } = this.engine.screenToWorld(this.x, this.y)
+		Xi -= 4
+		Yi += 4
+		return { Xi, Yi }
+	}
 }

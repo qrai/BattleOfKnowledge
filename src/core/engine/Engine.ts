@@ -7,6 +7,7 @@ import BuildMode from './component/BuildMode'
 import IComponent from './type/IComponent'
 import Camera from './component/Camera'
 import IObject from './type/IObject'
+import Player from './component/Player'
 
 export default new class Engine {
 	private readonly tileColumnOffset: number = 256; //px
@@ -40,6 +41,7 @@ export default new class Engine {
 
 	public components: IComponent[] = [];
 	public camera?: Camera;
+	public player?: Player;
 	public building?: BuildMode;
 	public addComponent(component: IComponent) {
 		this.components.push(component)
@@ -47,6 +49,9 @@ export default new class Engine {
 		// Core components
 		if(component instanceof Camera) {
 			this.camera = component
+		}
+		else if(component instanceof Player) {
+			this.player = component
 		}
 		else if(component instanceof BuildMode) {
 			this.building = component
@@ -95,9 +100,15 @@ export default new class Engine {
 		// Add event listeners
 		window.onclick = () => {
 			// Build
-			if(this.building?.tile && this.map) {
-				// Change tile
-				this.map.tiles[this.selectedTileX][this.selectedTileY][this.building.layer] = this.building.tile
+			if(this.building?.tile && this.map && this.player) {
+				if(this.building.canBuild(this.player, this.selectedTileX, this.selectedTileY)) {
+					// Change tile
+					this.map.tiles[this.selectedTileX][this.selectedTileY][this.building.layer] = this.building.tile
+				}
+				else {
+					//TODO: Show error messsage
+					console.error('Unable to build: something on the way')
+				}
 			}
 
 			let { x, y } = this.worldToScreen(this.selectedTileX, this.selectedTileY)
@@ -195,7 +206,7 @@ export default new class Engine {
 	private render(delta: number) {
 		if(!this.context || !this.map) return
 
-		this.context.canvas.width = this.context.canvas.width
+		// this.context.canvas.width = this.context.canvas.width
 
 		if(this.camera) this.camera.begin()
 
@@ -212,10 +223,15 @@ export default new class Engine {
 					// Is layer exists in this position
 					if(Zi < this.map.tiles[Xi][Yi].length) {
 						// Draw building
-						if(Zi === this.building?.layer && Xi === this.selectedTileX && Yi === this.selectedTileY && this.building.tile && this.isCursorOnMap()) {
-							this.context.filter = 'sepia(100%) hue-rotate(90deg) saturate(200%)'
+						if(Zi === this.building?.layer && Xi === this.selectedTileX && Yi === this.selectedTileY && this.building.tile && this.isCursorOnMap() && this.player) {
+							const buildColor = this.building.canBuild(this.player, Xi, Yi)
+								? '90deg'
+								: '310deg'
+
+							this.context.filter = `sepia(100%) hue-rotate(${buildColor}) saturate(200%)`
 							this.drawTile(this.selectedTileX, this.selectedTileY, this.tileImages[this.building.tile])
 							this.context.filter = 'none'
+
 							continue
 						}
 
@@ -234,7 +250,7 @@ export default new class Engine {
 		}
 
 		// Drawing selection
-		this.drawSelected(this.selectedTileX, this.selectedTileY, '#ffd700')
+		if(!this.building) this.drawSelected(this.selectedTileX, this.selectedTileY, '#ffd700')
 
 		// Objects
 		for(let obj of Object.values(this.objects)) {

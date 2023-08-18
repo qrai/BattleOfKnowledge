@@ -21,8 +21,8 @@ const MapGenerator = new class {
 					map.pushTile(x, y, biome.plant)
 				}
 
-				// Chest (0.5%)
-				if(this.randomBoolean(0.005)) {
+				// Chest (0.1%)
+				if(this.randomBoolean(0.001)) {
 					map.setTile(x, y, 1, "chest")
 				}
 			}

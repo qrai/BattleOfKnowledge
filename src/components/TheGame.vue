@@ -25,9 +25,9 @@ export default defineComponent({
 		
 		// Load game
 		Engine.load(this.$refs.canvas as HTMLCanvasElement, map)
-		//Engine.building = new BuildMode()
-		//Engine.building.tile = 'planks'
-		//Engine.building.layer = 0
+		// Engine.building = new BuildMode()
+		// Engine.building.tile = 'stoneWall'
+		// Engine.building.layer = 2
 	}
 })
 </script>
